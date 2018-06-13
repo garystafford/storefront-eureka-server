@@ -1,0 +1,23 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+logging:
+  level:
+    root: DEBUG
+---
+spring:
+  profiles: docker
+logging:
+  level:
+    root: INFO
