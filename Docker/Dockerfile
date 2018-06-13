@@ -8,4 +8,4 @@ RUN set -ex \
 RUN mkdir /storefront
 COPY /build/libs/*.jar /storefront/eureka.jar
 WORKDIR /storefront
-CMD ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "eureka.jar"]
+CMD ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=docker", "eureka.jar"]
