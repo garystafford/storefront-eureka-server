@@ -1,55 +1,51 @@
-buildscript {
-    ext {
-        springBootVersion = '2.0.2.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
+plugins {
+    id 'com.github.ben-manes.versions' version '0.38.0'
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'idea'
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+sourceCompatibility = '11'
+
+def major = '3'
+def minor = '0'
+def patch = System.env.BUILD_NUMBER ?: '0'
+version = major + '.' + minor + '.' + patch
 
 bootJar {
-    baseName = 'eureka-server'
-    version = '0.0.1-SNAPSHOT'
+    launchScript()
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+ext {
+    set('springCloudVersion', '2020.0.2')
+    set('springBootVersion', '2.4.5')
+    set('springCloudEureka', '3.0.2')
+}
 
 repositories {
     mavenCentral()
 }
 
-
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.RC2'
-    }
-}
-
-repositories {
-    maven {
-        url 'https://repo.spring.io/libs-milestone'
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:${springCloudEureka}"
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
-
-eclipse {
-    classpath {
-        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-    }
+test {
+    useJUnitPlatform()
 }
