@@ -7,6 +7,6 @@ RUN set -ex \
   && apk upgrade \
   && apk add curl jq
 RUN mkdir /storefront
-COPY /build/libs/*.jar /storefront/eureka.jar
+COPY /build/libs/*.jar /storefront/app.jar
 WORKDIR /storefront
-CMD ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "eureka.jar"]
+CMD ["java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "app.jar"]
